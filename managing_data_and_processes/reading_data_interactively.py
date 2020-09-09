@@ -1,3 +1,5 @@
+# Using user input to calculate number of seconds for hour, minute, seconds
+
 #!/usr/bin/env python3
 
 def to_seconds(hours, minutes, seconds):
