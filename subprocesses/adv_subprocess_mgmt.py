@@ -2,7 +2,7 @@ import os
 import subprocess
 
 my_env = os.environ.copy()
-my_env["PATH"] = os.pathsep.join(["/opt/adv_subprocess_mgmt/", my_env["PATH"]])
+my_env["PATH"] = os.pathsep.join(["/opt/my_app/", my_env["PATH"]])
 
 
-result = subprocess.run(['adv_subprocess_mgmt'], env=my_env)
+result = subprocess.run(['my_app'], env=my_env)
