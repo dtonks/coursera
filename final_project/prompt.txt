@@ -1,0 +1,16 @@
+ We've said that we want to find some specific log lines in the sy log file. We strongly recommend that you use regular expressions to find them (regex)
+
+ After extracting the information, you'll need to count how many errors are of the same type, and how many info and error messages there are for a given user (dictionaries, one to count error messages and count per user usage)
+
+ The output of your Python script should be a couple of CSV files. Each of them containing the names of the columns and the data in the order that it needs to be presented
+
+ Once those files are generated, you'll need to call the CSV html.py script to create HTML files based on CSV data
+
+ You'll have access to look at how the script works but the key is to pass two parameters to it. The name of the CSV file to read and the name of the HTML file generate. (use a python script or bash)
+
+
+ What you'll do
+Use regex to parse a log file
+Append and modify values in a dictionary
+Write to a file in CSV format
+Move files to the appropriate directory for use with the CSV->HTML converter
