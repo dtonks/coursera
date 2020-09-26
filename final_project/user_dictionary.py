@@ -1,5 +1,15 @@
 import re
 import operator
+# line1 = "May 27 11:45:40 ubuntu.local ticky: INFO: Created ticket [#1234] (username)"
+# print(re.search(r"ticky: INFO: ([\w ]*) ", line1))
+
+# line2 = "May 27 11:45:40 ubuntu.local ticky: ERROR: Error creating ticket [#1234] (username)"
+# print(re.search(r"ticky: ERROR: ([\w ]*) ", line2))
+
+error1 = "Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
+# error2 = "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)"
+# error3 = "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)"
+# error4 = "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
 
 # find if it's an ERROR or INFO
 def error_type(message):
@@ -34,8 +44,7 @@ def get_error(message):
 # User Statistic - I want Username and a count of Username[error], username[info]
 user_stats = {}
 for line in message:
-  user_stats[regex_username(line)] = {get_error(line): 1
-  }
+  user_stats[regex_username(line)] = {get_error(line): 1}
 
   # user_stats.get(regex_username(line), 0) + 1
 
