@@ -6,48 +6,52 @@ import operator
 # line2 = "May 27 11:45:40 ubuntu.local ticky: ERROR: Error creating ticket [#1234] (username)"
 # print(re.search(r"ticky: ERROR: ([\w ]*) ", line2))
 
-error1 = "Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
+# error1 = "Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
 # error2 = "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)"
 # error3 = "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)"
 # error4 = "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
-
-# find if it's an ERROR or INFO
-def error_type(message):
-  regex_error_or_info = r"(ERROR|INFO)"
-  msg_type = re.search(regex_error_or_info, message)
-  return msg_type[1]
 
 # how many info and error messages there are for a given user (dictionary)
 def regex_username(message):
   regex_username = r"\((.*?)\)"
   username = re.search(regex_username, message)
-  return username[1]
+  return str(username[1])
+
+# find if it's an ERROR or INFO
+def error_type(message):
+  regex_error_or_info = r"(ERROR|INFO)"
+  msg_type = re.search(regex_error_or_info, message)
+  return str(msg_type[1])
+
+# type of error message
+def error_msg(message):
+  regex_error_msg = r": \w+ (.*?) (\[#|\()"
+  err_msg = re.search(regex_error_msg, message)
+  return str(err_msg[1])
 
 message = ["Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
            "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)",
            "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)",
            "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
+           "Jan 31 08:01:40 ubuntu.local ticky: INFO Commented on ticket [#4709] (jackowens)",
            "Jan 31 01:00:50 ubuntu.local ticky: INFO Commented on ticket [#4709] (blossom)"
           ]
 
-# Error Message - I want Error and Count
+# Error Message - I want Error message and Count
 def get_error(message):
   error_message = {}
-  regex_error_msg = r": \w+ (.*?) \("
   for line in message:
-    error_message[error_type(line)] = error_message.get(error_type(line), 0) + 1
-    # error_sort = sorted(error_message.items(), key=operator.itemgetter(1), reverse=True)
-  # print(error_sort)
-    return error_message
-
+    error_message[error_msg(line)] = error_message.get(error_msg(line), 0) + 1
+  error_message = sorted(error_message.items(), key=operator.itemgetter(1), reverse=True)
+  return error_message
+print(get_error(message))
 
 # User Statistic - I want Username and a count of Username[error], username[info]
-user_stats = {}
-for line in message:
-  user_stats[regex_username(line)] = {get_error(line): 1}
-
-  # user_stats.get(regex_username(line), 0) + 1
-
-
-# sort = sorted(user_stats.items(), key=operator.itemgetter(1), reverse=True)
-print(user_stats)
+# user_stats = {"Darren": {"ERROR": 1, "INFO": 1}}
+def user_statistics(message):
+  user_stats = {}
+  for line in message:
+    ru = regex_username(line)
+    user_stats[ru] = user_stats.get(ru, 0) + 1
+  return user_stats
+print(user_statistics(message))
