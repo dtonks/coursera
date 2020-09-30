@@ -49,9 +49,14 @@ print(get_error(message))
 # User Statistic - I want Username and a count of Username[error], username[info]
 # user_stats = {"Darren": {"ERROR": 1, "INFO": 1}}
 def user_statistics(message):
-  user_stats = {}
+  user_stat = {}
   for line in message:
-    ru = regex_username(line)
-    user_stats[ru] = user_stats.get(ru, 0) + 1
-  return user_stats
+    user_stat[regex_username(line)] = {"ERROR": 0, "INFO": 0}
+  for line in message:
+    if error_type(line) == "ERROR":
+      user_stat[regex_username(line)]["ERROR"] += 1
+    else:
+      user_stat[regex_username(line)]["INFO"] += 1
+  user_stat = sorted(user_stat.items())
+  return user_stat
 print(user_statistics(message))
