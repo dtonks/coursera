@@ -1,17 +1,7 @@
 import re
 import operator
-# line1 = "May 27 11:45:40 ubuntu.local ticky: INFO: Created ticket [#1234] (username)"
-# print(re.search(r"ticky: INFO: ([\w ]*) ", line1))
+import csv
 
-# line2 = "May 27 11:45:40 ubuntu.local ticky: ERROR: Error creating ticket [#1234] (username)"
-# print(re.search(r"ticky: ERROR: ([\w ]*) ", line2))
-
-# error1 = "Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
-# error2 = "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)"
-# error3 = "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)"
-# error4 = "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)"
-
-# how many info and error messages there are for a given user (dictionary)
 def regex_username(message):
   regex_username = r"\((.*?)\)"
   username = re.search(regex_username, message)
@@ -37,17 +27,16 @@ message = ["Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information t
            "Jan 31 01:00:50 ubuntu.local ticky: INFO Commented on ticket [#4709] (blossom)"
           ]
 
-# Error Message - I want Error message and Count
+# {"Ticket doesn't exist": 2, "Commented on ticket": 1}
 def get_error(message):
   error_message = {}
   for line in message:
     error_message[error_msg(line)] = error_message.get(error_msg(line), 0) + 1
   error_message = sorted(error_message.items(), key=operator.itemgetter(1), reverse=True)
   return error_message
-print(get_error(message))
+# print(get_error(message))
 
-# User Statistic - I want Username and a count of Username[error], username[info]
-# user_stats = {"Darren": {"ERROR": 1, "INFO": 1}}
+ # {"Darren": {"ERROR": 2, "INFO": 1}}
 def user_statistics(message):
   user_stat = {}
   for line in message:
@@ -59,4 +48,28 @@ def user_statistics(message):
       user_stat[regex_username(line)]["INFO"] += 1
   user_stat = sorted(user_stat.items())
   return user_stat
-print(user_statistics(message))
+# print(user_statistics(message))
+
+# output error_message.csv
+with open("error_message.csv", "w") as csv_file:
+  with open("syslog.log", "r") as f:
+    fieldnames = ["Error", "Count"]
+    error_message = get_error(f.readlines())
+
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in error_message:
+      writer.writerow({"Error": row[0], "Count": row[1]})
+
+# output user_statistics.csv
+with open("user_statistics.csv", "w") as csv_file:
+  with open("syslog.log", "r") as f:
+    fieldnames = ["Username", "INFO", "ERROR"]
+    user_stats = user_statistics(f.readlines())
+
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in user_stats:
+      writer.writerow({"Username": row[0],
+                       "INFO": row[1]["INFO"],
+                       "ERROR": row[1]["ERROR"]})
