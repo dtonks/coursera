@@ -2,30 +2,31 @@ import re
 import operator
 import csv
 
+# message = ["Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
+#            "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)",
+#            "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)",
+#            "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
+#            "Jan 31 08:01:40 ubuntu.local ticky: INFO Commented on ticket [#4709] (jackowens)",
+#            "Jan 31 01:00:50 ubuntu.local ticky: INFO Commented on ticket [#4709] (blossom)"
+#           ]
+
 def regex_username(message):
   regex_username = r"\((.*?)\)"
   username = re.search(regex_username, message)
-  return str(username[1])
+  return str(username[1]) # username.group(1) for earlier versions of python
 
 # find if it's an ERROR or INFO
 def error_type(message):
   regex_error_or_info = r"(ERROR|INFO)"
   msg_type = re.search(regex_error_or_info, message)
-  return str(msg_type[1])
+  return str(msg_type[1]) # msg_type.group(1) for earlier versions of python
 
 # type of error message
 def error_msg(message):
   regex_error_msg = r": \w+ (.*?) (\[#|\()"
   err_msg = re.search(regex_error_msg, message)
-  return str(err_msg[1])
+  return str(err_msg[1]) # err_msg.group(1) for earlier versions of python
 
-message = ["Jan 31 01:43:10 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
-           "Jan 31 02:55:31 ubuntu.local ticky: ERROR Ticket doesn't exist (xlg)",
-           "Jan 31 03:05:35 ubuntu.local ticky: ERROR Timeout while retrieving information (ahmed.miller)",
-           "Jan 31 08:01:40 ubuntu.local ticky: ERROR Tried to add information to closed ticket (jackowens)",
-           "Jan 31 08:01:40 ubuntu.local ticky: INFO Commented on ticket [#4709] (jackowens)",
-           "Jan 31 01:00:50 ubuntu.local ticky: INFO Commented on ticket [#4709] (blossom)"
-          ]
 
 # {"Ticket doesn't exist": 2, "Commented on ticket": 1}
 def get_error(message):
