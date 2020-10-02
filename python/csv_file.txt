@@ -1,0 +1,12 @@
+Sabrina Green,802-867-5309,System Administrator
+Eli Jones,684-3481127,IT specialist
+Melody Daniels,846-687-7436,Programmer
+Charlie Rivera,698-746-3357,Web Developer
+
+
+Python Code:
+f = open("csv_file.txt")
+csv_f = csv.reader(f)
+for row in csv_f:
+    name, phone, role = row
+    print(f"Name: {name}, Phone: {phone}, Role: {role}"
