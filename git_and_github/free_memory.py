@@ -1,6 +1,6 @@
 #!/us/bin/env python3
 
 def main():
-  pass
+  print("Everythin is ok")
 
 main()
