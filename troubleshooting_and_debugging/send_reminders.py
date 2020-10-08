@@ -49,12 +49,12 @@ def main():
 
   try:
     date, title, emails = sys.argv[1].split("|")
-    message = message_templae(date, title)
+    message = message_template(date, title)
     send_message(message, emails)
     print("Successfully sent reminders to:", emails)
   except Exception as e:
     print(f"Failure to send email with{e}", file=sys.stderr)
 
-if __name__ = "__main__":
+if __name__ == "__main__":
   sys.exit(main())
 
