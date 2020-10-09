@@ -1,0 +1,53 @@
+How to check why web servers are slow using the terminal:
+
+# Below asks to make 500 requests
+# You can see how fast it is reading the requests
+ab -n 500 site.example.com/
+
+# If the website is slow, log into the website
+# Looks like ffmpeg is slowing everything down
+ssh webserver
+
+# Check the highest CPU usage
+top
+
+# Exit top
+q
+
+# Use nice to start a process with a different priority
+nice
+
+# Use renice for changing the priority of a process that's already running
+# renice takes the new priority as the first arguement and the process ID to change, as the second
+renice
+
+# Use Pidof, receives the process name and returns all process IDs that have that name
+# Iterate over the output of pidof with for loop
+# call renice for each of the process IDs
+for pid in $(pidof ffmpeg); do renice 19 $pid; done
+
+# rerun benchmark test
+ab -n 500 site.example.com/
+
+ps ax | less
+/ffmpeg
+q
+
+locate static/001.webm
+
+#go to the directory
+cd ...
+
+grep ffmpeg *
+
+# This is the example script
+vim deploy_videos
+
+# remove the part of the script that is causing it to be slow
+
+# Now that the error is removed, we can stop all processes for ffmpeg
+killall -STOP ffmpeg
+
+# for loop so you dont have to do one by one
+for pld in $(pidof ffmpeg); do while kill -CONT $pid; do sleep 1; done; done
+l
