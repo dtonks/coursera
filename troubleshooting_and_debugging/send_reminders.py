@@ -33,11 +33,21 @@ See you there.
 ''')
   return message
 
-def send_message(message, emails):
+def read_name(contacts, email):
+  name = {}
+  with open(contacts) as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+      names[row[0]] = row[1]
+  return names
+
+def send_message(message, emails, contacts):
   smtp = smtplib.SMTP('localhost')
-  message['From'] = 'noreply@eaxmple.com'
+  names = read_names(contacts)
   for email in emails.split(','):
-    del mesage['To']
+    name = names[email]
+    message = message_template(date, title, name)
+    message['From'] = 'noreply@example.com'
     message['To'] = email
     smtp.send_message(message)
   smtp.quit()
@@ -46,7 +56,6 @@ def send_message(message, emails):
 def main():
   if len(sys.argv) < 2:
     return usage()
-
   try:
     date, title, emails = sys.argv[1].split("|")
     message = message_template(date, title)
