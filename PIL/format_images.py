@@ -10,25 +10,12 @@ What do I want to do?
 6. save image to ~/opt/icons
 '''
 
+# ./format_images.py images
+
 from PIL import Image
 import os, sys
 
-## Allows you to run script on any folder
-# for folder in sys.argv[1:]:
-save_to = "./formatted"
-folder = "./images"
-
-for image in os.listdir(folder):
-  rgb_img = Image.open(f"./images/{image}")
+for file in glob.glob("ic_*"):
+  rgb_img = Image.open(file)
   img = rgb_img.convert("RGB")
-  img.resize((128,128)).rotate(270).save(f"./formatted/{image}.jpeg")
-
-  # rgb_img = img.convert('RGB')
-  # img.convert("RGB").show()
-  # print(img.mode)
-  # rgb_img.save(f"./formatted/{image}.jpeg")
-
-  # print(img.format)
-  # img.resize((128,128)).rotate(270).show()
-  # img.rotate(270).show()
-  break
+  img.resize((128,128)).rotate(270).save("/opt/icons/" + file, "JPEG")
